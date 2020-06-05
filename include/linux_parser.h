@@ -41,12 +41,16 @@ enum CPUStates {
   kGuest_,
   kGuestNice_
 };
-
 struct Memory {
   int total;
   int free;
   int available;
   int buffers;
+};
+
+struct Uptime_struct {
+  std::string uptime;
+  std::string idletime;
 };
 
 std::vector<std::string> CpuUtilization();
