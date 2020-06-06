@@ -19,6 +19,7 @@ const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
 
 // System
+std::vector<std::string> CpuUtilization();
 int MemoryValue(std::string);
 float MemoryUtilization();
 long UpTime();
@@ -53,7 +54,6 @@ struct Uptime_struct {
   std::string idletime;
 };
 
-std::vector<std::string> CpuUtilization();
 long Jiffies();
 long ActiveJiffies();
 long ActiveJiffies(int pid);
