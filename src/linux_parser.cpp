@@ -196,7 +196,7 @@ vector<string> LinuxParser::Process::CpuUtilization(int pid) {
   string key;
   string value;
   vector<string> stats;
-  int i = 0;
+  int i = 1;
   std::ifstream filestream(kProcDirectory + std::to_string(pid) +
                            kStatFilename);
 
@@ -236,23 +236,20 @@ string LinuxParser::Process::Ram(int pid) {
   string line;
   string key;
   string value;
-  int i = 0;
   std::ifstream filestream(kProcDirectory + std::to_string(pid) +
-                           kStatFilename);
-
+                           kStatusFilename);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
+      std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream linestream(line);
-      while (linestream >> value) {
-        if (i == 23) {
+      while (linestream >> key >> value) {
+        if (key == "VmSize") {
           return value;
         }
-        i++;
       }
     }
   }
   return value;
-  ;
 }
 
 // DONE: Read and return the user ID associated with a process
@@ -307,7 +304,7 @@ long LinuxParser::Process::UpTime(int pid) {
   string line;
   string key;
   string value;
-  int i = 0;
+  int i = 1;
   std::ifstream filestream(kProcDirectory + std::to_string(pid) +
                            kStatFilename);
 
@@ -316,11 +313,35 @@ long LinuxParser::Process::UpTime(int pid) {
       std::istringstream linestream(line);
       while (linestream >> value) {
         if (i == 22) {
-          return std::stol(value);
+          return std::stoll(value);
         }
         i++;
       }
     }
   }
   return 0;
+}
+
+// DONE: Read and return the state of a process
+// REMOVE: [[maybe_unused]] once you define the function
+string LinuxParser::Process::State(int pid) {
+  string line;
+  string key;
+  string value;
+  int i = 1;
+  std::ifstream filestream(kProcDirectory + std::to_string(pid) +
+                           kStatFilename);
+
+  if (filestream.is_open()) {
+    while (std::getline(filestream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> value) {
+        if (i == 3) {
+          return value;
+        }
+        i++;
+      }
+    }
+  }
+  return value;
 }

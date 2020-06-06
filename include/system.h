@@ -12,7 +12,7 @@ class System {
   Processor& Cpu();                   // DONE: See src/system.cpp
   std::vector<Process>& Processes();  // TODO: See src/system.cpp
   float MemoryUtilization();          // TODO: See src/system.cpp
-  long UpTime();                      // TODO: See src/system.cpp
+  long long unsigned UpTime();        // TODO: See src/system.cpp
   int TotalProcesses();               // TODO: See src/system.cpp
   int RunningProcesses();             // TODO: See src/system.cpp
   std::string Kernel();               // DONE: See src/system.cpp

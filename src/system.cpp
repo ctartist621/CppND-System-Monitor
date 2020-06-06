@@ -23,7 +23,8 @@ Processor& System::Cpu() { return cpu_; }
 vector<Process>& System::Processes() {
   processes_ = {};
   for (int pid : LinuxParser::Pids()) {
-    processes_.push_back(Process(pid));
+    Process p = Process(pid);
+    processes_.push_back(p);
   }
   std::sort(processes_.begin(), processes_.end());
   return processes_;
@@ -45,4 +46,4 @@ int System::RunningProcesses() { LinuxParser::RunningProcesses(); }
 int System::TotalProcesses() { return LinuxParser::TotalProcesses(); }
 
 // DONE: Return the number of seconds since the system started running
-long int System::UpTime() { return LinuxParser::UpTime(); }
+long long unsigned System::UpTime() { return LinuxParser::UpTime(); }
