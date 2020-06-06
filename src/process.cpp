@@ -17,7 +17,7 @@ using std::vector;
 // DONE: Return this process's ID
 int Process::Pid() { return pid_; }
 
-// TODO: Return this process's CPU utilization
+// DONE: Return this process's CPU utilization
 float Process::CpuUtilization() {
   vector<string> stats = LinuxParser::Process::CpuUtilization(pid_);
   if (stats.size() == 5) {
@@ -29,8 +29,9 @@ float Process::CpuUtilization() {
 
     int total_time = this->stat_.utime + this->stat_.stime +
                      this->stat_.cutime + this->stat_.cstime;
-    int Hertz = sysconf(_SC_CLK_TCK);
-    float seconds = LinuxParser::UpTime() - (this->stat_.starttime / Hertz);
+    long Hertz = sysconf(_SC_CLK_TCK);
+    float seconds =
+        LinuxParser::UpTime() - (LinuxParser::Process::UpTime(pid_) / Hertz);
 
     return std::max((float)0, 100 * (total_time / Hertz) / seconds);
   } else {
@@ -44,14 +45,17 @@ string Process::Command() { return string(); }
 // DONE: Return this process's memory utilization
 string Process::Ram() {
   std::string vsize = LinuxParser::Process::Ram(pid_);
-  return std::to_string(std::stol(vsize) / (long)1024);
+  return std::to_string(std::stol(vsize) / (long)1000.0);
 }
 
-// TODO: Return the user (name) that generated this process
+// DONE: Return the user (name) that generated this process
 string Process::User() { return LinuxParser::Process::User(pid_); }
 
-// TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { return 0; }
+// DONE: Return the age of this process (in seconds)
+long int Process::UpTime() {
+  long Hertz = sysconf(_SC_CLK_TCK);
+  return LinuxParser::Process::UpTime(pid_) / Hertz;
+}
 
 // DONE: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
